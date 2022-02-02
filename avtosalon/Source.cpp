@@ -30,16 +30,37 @@ public:
 		cout << "Engine : " << engine << "\n";
 		cout << "Price : " << price << "\n";
 	}
+	string get_name()const
+	{
+		return name;
+	}
+	double get_price()const
+	{
+		return price;
+	}
+	double get_year()const
+	{
+		return year;
+	}
+
 };
+bool operator<(const car& c, const car& c1)
+{
+	return c.get_price() < c1.get_price();
+}
+bool operator>(const car& c, const car& c1)
+{
+	return c.get_price() > c1.get_price();
+}
 int menu()
 {
 	int choice;
 	cout << "0 - Exit\n";
 	cout << "1 - Add car  !\n";
-	cout << "2 - Delete car !\n";
-	cout << "3 - Print car!\n";
-	cout << "4 - Sort !\n";
-	cout << "5 - Search !\n";
+	cout << "2 - Delete car by brand !\n";
+	cout << "3 - Print car by brand !\n";
+	cout << "4 - Sort by price!\n";
+	cout << "5 - Search car by year of manufacture !\n";
 	cout << "Enter your chioce!\n";
 	cin >> choice;
 	return choice;
@@ -56,7 +77,7 @@ void print_vector(const vector<car> c)
 }
 int main()
 {
-	vector<car> c = { { "BMW", 2010, 3.5 , 15000 }, { "Audi", 2012, 2 , 13000 } };
+	vector<car> c = { { "BMW", 2010, 3.5 , 15000 }, { "Audi", 2012, 2 , 13000 },{ "BMW x3", 2012, 3.2 , 16000 }, { "Opel", 2010, 1.4 , 13000 } };
 	string name;
 	int year;
 	double price, engine;
@@ -79,13 +100,62 @@ int main()
 			cin >> price;
 			c.push_back(car{ name, year, engine , price });
             break;
-        case 2:
+		case 2: 
+		{
+			cout << "Enter car you want to delete :  ";
+			cin >> name;
+			auto it = find_if(c.begin(), c.end(), [name](const car& el)
+				{
+					return el.get_name() == name;
+				});
+			if (it != c.end()) {
+				c.erase(it);
+			}
+			else
+			{
+				cout << "Not found ! "; system("pause");
+			}
+			
+		}
             break;
-        case 3:
+		case 3: 
+	    {
+			cout << "Enter car you want to print :  ";
+			cin >> name;
+			auto it = find_if(c.begin(), c.end(), [name](const car& el)
+				{
+					return el.get_name() == name;
+				});
+			if (it != c.end()) {
+				it->print();
+			}
+			else
+			{
+				cout << "Not found ! ";
+			}
+			system("pause");
+	    }
             break;
         case 4:
+			sort(c.begin(), c.end() , greater<car>());
             break;
         case 5:
+		{
+			cout << "Enter year of manufacture :  ";
+			cin >> year;
+			auto it = find_if(c.begin(), c.end(), [year](const car& el)
+				{
+					return el.get_year() == year;
+				});
+			if (it != c.end()) {
+				it->print();
+			}
+			else
+			{
+				cout << "Not found ! ";
+			}
+			system("pause");
+		}
             break;
         }
     } while (true);
